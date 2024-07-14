@@ -2,11 +2,12 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomeComponent from './components/HomeComponent.vue';
 import AddStudent from './components/AddStudent.vue';
 import AddPayment from './components/AddPayment.vue';
+import StudentsComponent from './components/StudentsComponent.vue';
 
 const routes = [
     { path: '/', name: 'home', component: HomeComponent },
 
-    // { path: '/students', name: 'students', component: StudentsComponent },
+    { path: '/students', name: 'students', component: StudentsComponent },
 
     // { path: '/fees', name: 'fees', component: FeesComponent },
 

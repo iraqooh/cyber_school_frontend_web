@@ -15,11 +15,15 @@
               <router-link class="nav-link" to="/students">Students</router-link>
             </li>
             <li class="nav-item">
+              <router-link class="nav-link" to="/add">Add</router-link>
+            </li>
+            <li class="nav-item">
               <router-link class="nav-link" to="/fees">Fees</router-link>
             </li>
             <li class="nav-item">
               <router-link class="nav-link" to="/payments">Payments</router-link>
             </li>
+            
           </ul>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown">
