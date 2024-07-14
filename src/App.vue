@@ -12,12 +12,6 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <router-link class="nav-link" to="/students">Students</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/fees">Fees</router-link>
-            </li>
-            <li class="nav-item">
               <router-link class="nav-link" to="/payments">Payments</router-link>
             </li>
           </ul>

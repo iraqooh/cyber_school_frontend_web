@@ -5,10 +5,10 @@
         <button type="button" class="btn-close" aria-label="Close" @click="dismissAlert"></button>
       </div>
       
-      <div class="d-flex justify-content-center w-50-md w-100">
-        <div v-if="!showStudentDetails" class="m-4 w-100">
+      <div class="d-flex justify-content-center w-100">
+        <div v-if="!showStudentDetails" class="m-4 form-container">
           <h2 class="mb-5">Add New Student</h2>
-          <form @submit.prevent="addStudent" class="">
+          <form @submit.prevent="addStudent">
             <div class="mb-3">
               <label for="firstName" class="form-label">First Name</label>
               <input type="text" class="form-control" id="firstName" v-model="form.first_name" required>
@@ -190,5 +190,15 @@
 
     .col-md-6 {
         transition: all 0.5s ease-in-out;
+    }
+
+    .form-container {
+        width: 50%;
+    }
+
+    @media screen and (max-width: 768px) {
+        .form-container {
+            width: 100%;
+        }
     }
 </style>
