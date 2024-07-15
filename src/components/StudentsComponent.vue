@@ -2,7 +2,7 @@
     <div class="container d-flex">
       <div class="card flex-grow-1 me-3">
         <div style="background-color: darkolivegreen;" class="card-header">
-          <h4>Students</h4>
+          <h4 style ="text-align: center">Students</h4>
         </div>
         <div class="card-body">
           <ul v-if="students.length > 0" class="list-group">
@@ -19,8 +19,8 @@
         </div>
       </div>
       <div v-if="selectedStudent" class="card flex-grow-1">
-        <div class="card-header">
-          <h5 style="background-color: green;">Student Details</h5>
+        <div class="card-header" style="background-color: green;">
+          <h5 style ="text-align: center">Student Details</h5>
         </div>
         <div class="card-body">
           <table class="table table-bordered">
@@ -57,14 +57,14 @@
                 <th>Status</th>
                 <td>{{ selectedStudent.status }}</td>
               </tr>
-              <tr>
+              <!-- <tr>
                 <th>School Fees</th>
                 <td>{{ selectedStudent.school_fees }}</td>
               </tr>
               <tr>
                 <th>Initial Payment (Optional)</th>
                 <td>{{ selectedStudent.payments }}</td>
-              </tr>
+              </tr> -->
               <tr>
                 <td colspan="2">
                   <RouterLink :to="{ path: '/' + selectedStudent.student_id + '/edit' }" class="btn btn-success float-end">
