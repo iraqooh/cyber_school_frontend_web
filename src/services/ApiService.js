@@ -7,9 +7,9 @@ class ApiService {
         return apiClient.get('/financials')
     }
 
-    // get all students
-    getStudents(query) {
-        return apiClient.get(`/students${query}`)
+    // Get all students
+    getStudents(query = '') {
+        return apiClient.get(`/students${query}`);
     }
 
     // Fetch detailed student data

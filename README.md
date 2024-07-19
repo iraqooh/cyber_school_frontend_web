@@ -28,10 +28,10 @@ Cyber School is a web application for managing school data including student bio
 
 ## API Configuration
 
-The frontend communicates with the backend [API](https://github.com/iraqooh/cyber_school_api). Ensure the API URL is correctly set in the `ApiService.js` file:
+The frontend communicates with the backend [API](https://github.com/iraqooh/cyber_school_api). Ensure the API URL is correctly set in the `index.js` file:
 
 ```javascript
-// src/services/ApiService.js
+// src/api/index.js
 
 import axios from 'axios';
 

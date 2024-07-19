@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
         <router-link :to="{ name: 'home'}" class="text-decoration-none">
-          <a class="navbar-brand" href="#">Cyber School</a>
+          <a class="navbar-brand text-light" href="#">Cyber School</a>
         </router-link>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -12,7 +12,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <router-link class="nav-link" to="/payments">Payments</router-link>
+              <router-link class="nav-link text-light" to="/students">Students</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link text-light" to="/add">Add</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link text-light" to="/fees">Fees</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link text-light" to="/payments">Payments</router-link>
             </li>
           </ul>
           <ul class="navbar-nav ml-auto">
@@ -42,12 +51,12 @@
     <footer class="footer bg-light text-center text-lg-start mt-5 pb-5">
       <div class="container p-4">
         <div class="row">
-          <div class="col-lg-3 col-md-12 mb-4 mb-md-0">
+          <div class="col-lg-4 col-md-12 mb-4 mb-md-0">
             <h5 class="text-uppercase">Cyber School</h5>
             <p>Manage your school efficiently with Cyber School Management System.</p>
           </div>
 
-          <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
+          <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
             <h5 class="text-uppercase">Links</h5>
             <ul class="list-unstyled mb-0">
               <li>
@@ -65,28 +74,31 @@
             </ul>
           </div>
 
-          <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
-            <h5 class="text-uppercase">Follow Us</h5>
-            <ul class="list-unstyled mb-0">
-              <li>
-                <a href="#" class="text-dark">Facebook</a>
-              </li>
-              <li>
-                <a href="#" class="text-dark">Twitter</a>
-              </li>
-              <li>
-                <a href="#" class="text-dark">Instagram</a>
-              </li>
-              <li>
-                <a href="#" class="text-dark">LinkedIn</a>
-              </li>
-            </ul>
-          </div>
-
-          <div class="col-lg-3 col-md-4 mb-4 mb-md-0 text-center p-3">
-            <a href="#app" class="btn btn-primary">
-              <font-awesome-icon icon="arrow-up" />
-            </a>
+          <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+            <div class="div d-flex justify-content-between">
+              <div>
+                <h5 class="text-uppercase">Follow Us</h5>
+                <ul class="list-unstyled mb-0">
+                  <li>
+                    <a href="#" class="text-dark">Facebook</a>
+                  </li>
+                  <li>
+                    <a href="#" class="text-dark">Twitter</a>
+                  </li>
+                  <li>
+                    <a href="#" class="text-dark">Instagram</a>
+                  </li>
+                  <li>
+                    <a href="#" class="text-dark">LinkedIn</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-lg-3 col-md-4 mb-4 mb-md-0 text-center p-3">
+                <a href="#app" class="btn btn-primary">
+                  <font-awesome-icon icon="arrow-up" />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -112,14 +124,17 @@
       margin: 0;
     }
 
+    .navbar {
+      background: blue;
+      background: -webkit-linear-gradient(bottom left, blue, whitesmoke);
+      background: -ms-linear-gradient(bottom left, blue, whitesmoke);
+      background: linear-gradient(to top right, blue, whitesmoke);
+    }
+
     #app {
       display: flex;
       flex-direction: column;
       min-height: 100vh;
-    }
-
-    .main-content {
-      flex: 1;
     }
 
     .footer {
