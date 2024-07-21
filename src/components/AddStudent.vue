@@ -8,7 +8,7 @@
     <div class="d-flex justify-content-center w-50-md w-100">
       <div v-if="!showStudentDetails" class="m-4 w-100">
         <h2 class="mb-5">Add New Student</h2>
-        <form @submit.prevent="addStudent" class="">
+        <form @submit.prevent="addStudent">
           <!-- form fields -->
           <div class="mb-3">
             <label for="firstName" class="form-label">First Name</label>
@@ -136,7 +136,7 @@ export default {
     async addStudent() {
       try {
         const response = await ApiService.addStudent(this.form);
-        this.newStudent = response.data; // Ensure response is destructured correctly
+        this.newStudent = response.data.student; // Ensure response is destructured correctly
         this.showSuccessAlert = true;
         this.showStudentDetails = true;
         this.resetForm(); // Reset form after successful submission
@@ -186,17 +186,17 @@ form {
   margin-left: auto;
 }
 
-    .col-md-6 {
-        transition: all 0.5s ease-in-out;
-    }
+.col-md-6 {
+  transition: all 0.5s ease-in-out;
+}
 
-    .form-container {
-        width: 50%;
-    }
+.form-container {
+  width: 50%;
+}
 
-    @media screen and (max-width: 768px) {
-        .form-container {
-            width: 100%;
-        }
-    }
+@media screen and (max-width: 768px) {
+  .form-container {
+    width: 100%;
+  }
+}
 </style>
