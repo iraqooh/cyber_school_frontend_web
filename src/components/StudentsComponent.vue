@@ -156,10 +156,6 @@ export default {
 </script>
 
 <style>
-.container {
-  
-}
-
 .list-group-item {
   cursor: pointer;
 }
@@ -167,4 +163,5 @@ export default {
 .list-group-item:hover {
   background-color: #f1f1f1;
 }
+
 </style>

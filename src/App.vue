@@ -135,5 +135,7 @@
 
     .footer {
       flex-shrink: 0;
+      background-color: whitesmoke;
+      background: radial-gradient(rgb(162, 163, 177), rgb(159, 166, 205), whitesmoke);
     }
 </style>
