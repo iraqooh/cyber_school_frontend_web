@@ -1,7 +1,7 @@
 <template>
-  <div class="container d-flex">
+  <div class="container my-5">
     <div class="card flex-grow-1 me-3">
-      <div class="card-header" style="background-color: darkolivegreen;">
+      <div class="card-header">
         <h4 class="text-center">Students</h4>
       </div>
       <div class="card-body">
@@ -157,7 +157,7 @@ export default {
 
 <style>
 .container {
-  display: flex;
+  
 }
 
 .list-group-item {

@@ -11,7 +11,6 @@
               <th>Class</th>
               <th>Category</th>
               <th>School Fees (UGX)</th>
-              <th>Initial Payment (UGX)</th>
               <th>Status</th>
             </tr>
           </thead>
@@ -23,7 +22,6 @@
               <td>{{ student.class }}</td>
               <td>{{ student.category }}</td>
               <td>{{ (student.school_fees ?? 0).toLocaleString('en-US') }}</td>
-              <td>{{ (student.initial_payment ?? 0).toLocaleString('en-US') }}</td>
               <td>{{ student.status ? 'Active' : 'Inactive' }}</td>
             </tr>
           </tbody>
@@ -67,7 +65,7 @@
   <style scoped>
   .heading {
     text-align: center;
-    margin-bottom: 20px; /* Adds space between the heading and the table */
+    margin-bottom: 20px;
   }
   
   .table-responsive {

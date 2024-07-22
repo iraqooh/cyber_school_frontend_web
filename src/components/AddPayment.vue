@@ -1,39 +1,38 @@
 <template>
-    <div class="container mt-5">
-      <h2>Add Payment</h2>
-      
-      <div v-if="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
-        <div class="d-flex justify-content-evenly">
-            <strong>Success!</strong> {{ successMessage }}
-            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
+  <div class="container mt-5 d-flex flex-column align-items-center">
+   <h2 class="h2">Add Payment</h2>
+   <div v-if="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+      <div class="d-flex justify-content-evenly">
+          <strong>Success!</strong> {{ successMessage }}
+          <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
       </div>
-
-      <div v-if="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
-        <div class="d-flex justify-content-evenly">
-            <strong>Error!</strong> {{ errorMessage }}
-            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
+   </div>
+   <div v-if="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <div class="d-flex justify-content-evenly">
+          <strong>Error!</strong> {{ errorMessage }}
+          <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
       </div>
-  
-      <form @submit.prevent="addPayment">
-        <div class="form-group">
-          <label for="student_id">Student ID</label>
-          <input type="number" id="student_id" @input="getBalance" v-model="payment.student_id" class="form-control" required />
-        </div>
-        <div class="form-group">
-          <label for="amount">Amount to be Paid</label>
-          <input type="number" id="amount" v-model="payment.amount" class="form-control" required />
-        </div>
-        <button type="submit" class="btn btn-primary w-100 my-3">Submit</button>
-      </form>
-    </div>
+   </div>
+   <div class="mt-4">
+    <form @submit.prevent="addPayment">
+      <div class="form-group">
+        <label for="student_id">Student ID</label>
+        <input type="number" id="student_id" @input="getBalance" v-model="payment.student_id" class="form-control" required />
+      </div>
+      <div class="form-group">
+        <label for="amount">Amount to be Paid</label>
+        <input type="number" id="amount" v-model="payment.amount" class="form-control" required />
+      </div>
+      <button type="submit" class="btn btn-primary w-100 my-3">Submit</button>
+    </form>
+   </div>
+ </div>
 </template>
-  
+
 <script>
   import ApiService from '../services/ApiService';
   
@@ -121,6 +120,7 @@
   
     .container {
       width: 50%;
+      min-height: 400px;
     }
   
     @media screen and (max-width: 768px) {
@@ -129,4 +129,4 @@
       }
     }
 </style>
-  
+

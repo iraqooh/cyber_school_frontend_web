@@ -113,10 +113,6 @@
   };
 </script>
 
-<style scoped>
-    
-</style>
-
 <style>
     /* Global Styles */
     body, html {

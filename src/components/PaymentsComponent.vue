@@ -1,35 +1,39 @@
 <template>
-    <div class="container mt-5">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Payments</h2>
-        <router-link class="btn btn-primary ms-2" :to="{ name: 'add-payment' }">Add Payment</router-link>
+  <div class="payments p-5">
+    <div class="p-5" >
+        <div class="d-flex justify-content-between align-items-center my-3">
+            <h5 class="">Payments</h5>
+            <router-link class="btn btn-primary ms-2" :to="{ name: 'add-payment' }">Add Payment</router-link>
+        </div>
+        <div class="">
+          <table class="table table-striped table-responsive">
+            <thead>
+              <tr>
+                <th>Payment ID</th>
+                <th>Student Name</th>
+                <th>Amount Paid</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="payment in visiblePayments" :key="payment.payment_id">
+                <td>{{ payment.payment_id }}</td>
+                <td>{{ payment.student.first_name }} {{ payment.student.last_name }}</td>
+                <td>UGX {{ payment.amount.toLocaleString() }}</td>
+                <td>{{ new Date(payment.createdAt).toLocaleDateString() }}</td>
+              </tr>
+            </tbody>
+          </table>
+      
+          <button class="btn btn-secondary w-100 mt-3" @click="loadMorePayments">Load More</button>
       </div>
-  
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Payment ID</th>
-            <th>Student Name</th>
-            <th>Amount Paid</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="payment in visiblePayments" :key="payment.payment_id">
-            <td>{{ payment.payment_id }}</td>
-            <td>{{ payment.student.first_name }} {{ payment.student.last_name }}</td>
-            <td>UGX {{ payment.amount.toLocaleString() }}</td>
-            <td>{{ new Date(payment.createdAt).toLocaleDateString() }}</td>
-          </tr>
-        </tbody>
-      </table>
-  
-      <button class="btn btn-secondary w-100 mt-3" @click="loadMorePayments">Load More</button>
     </div>
+  </div>
 </template>
 
+
 <script>
-import ApiService from '../services/ApiService';
+  import ApiService from '../services/ApiService';
 
 export default {
   name: 'PaymentsComponent',
@@ -58,17 +62,21 @@ export default {
   },
   created() {
     this.fetchPayments();
+    // document.title = 'Payments'
   }
 };
 </script>
 
+
 <style scoped>
-  .container {
+  .payments {
     width: 70%;
+    margin-left: 15%;
   }
   @media screen and (max-width: 768px) {
-    .container {
+    .payments {
       width: 100%;
+      margin-left: auto;
     }
   }
 </style>
