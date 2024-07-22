@@ -98,7 +98,7 @@
 
             <!-- Student Biodata -->
             <div class="col-md-4 p-3 biodata" v-if="selectedStudent">
-                <h5 class="mb-4 my-3 text-light">Student Biodata</h5>
+                <h5 class="mb-4 my-3">Student Biodata</h5>
                 <div class="bg-light p-3 rounded">
                   <div class="d-flex justify-content-between">
                     <strong>Name</strong>
@@ -151,7 +151,7 @@
 
             <!-- Payments List -->
             <div class="col-md-4 p-3" v-if="viewingPayments">
-                <h5 class="my-3 text-light">Payments</h5>
+                <h5 class="my-3">Payments</h5>
                 <ul class="list-group items-list">
                     <li v-for="payment in payments" :key="payment.payment_id" class="list-group-item">
                       <div class="d-flex justify-content-between text-start">
@@ -161,12 +161,20 @@
                       </div>
                     </li>
                 </ul>
-                <router-link :to="{ name: 'add-payment' }">
-                    <button type="button" class="btn btn-primary mt-3 w-100" 
-                    @click="showAddPayment" 
-                    :disabled="selectedStudent.total_payments 
-                    == selectedStudent.school_fees">Make a Payment</button>
-                </router-link>
+                <div @click="goToPayment">
+                  <router-link
+                    :to="{ name: 'add-payment' }"
+                    :class="{ 'disabled-link': isDisabled }"
+                  >
+                    <button
+                      type="button"
+                      class="btn btn-primary mt-3 w-100"
+                      :disabled="isDisabled"
+                    >
+                      Make a Payment
+                    </button>
+                  </router-link>
+                </div>
             </div>
 
             <div class="col-md-4 mt-5 sculpture" v-else>
@@ -203,7 +211,7 @@
           viewingPayments: false,
 
           search_query: null,
-          filter: 'first_name'
+          filter: 'first_name',
       };
   },
   computed: {
@@ -213,6 +221,10 @@
 
       isSelected(student) {
           return this.selectedStudent === student;
+      },
+
+      isDisabled() {
+        return this.selectedStudent.total_payments === this.selectedStudent.school_fees;
       }
   },
   methods: {
@@ -244,6 +256,11 @@
           this.viewingPayments = true;
       },
 
+      goToPayment(event) {
+        if (this.isDisabled) {
+          event.preventDefault();
+        }
+      },
 
       addStudent() {
           this.$router.push({ name: 'add-student' });
@@ -311,6 +328,11 @@
   .btn-link:hover {
     border: 2px solid blue;
     /* color: whitesmoke; */
+  }
+
+  .disabled-link {
+    pointer-events: none;
+    cursor: not-allowed;
   }
 
   /* .home {
