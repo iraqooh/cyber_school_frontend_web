@@ -48,14 +48,14 @@
       <div class="input-group my-4 w-75">
           <input type="text" class="form-control w-25" placeholder="Search for a student"
               v-model="search_query" @input="handleInput" @keypress.enter="searchStudents"/>
-          <select class="form-select input-group-prepend" :v-model="filter" @change="setFilter">
+          <select class="form-select input-group-prepend" v-model="filter" @change="setFilter">
               <option value="" selected disabled>Choose search parameter</option>
               <option value="first_name">First Name</option>
               <option value="last_name">Last Name</option>
               <option value="gender">Gender</option>
               <option value="physical_address">Physical Address</option>
               <option value="category">Category</option>
-              <option value="student_id">Student ID</option>
+              <option value="id">Student ID</option>
               <option value="status">Registration Status</option>
           </select>
           <button class="btn btn-dark text-light" type="button" @click="searchStudents">Search</button>
@@ -86,7 +86,7 @@
 
               <!-- Student Biodata -->
               <div class="col-md-4 p-3 biodata" v-if="selectedStudent">
-                  <h5 class="mb-4 my-3">Student Biodata</h5>
+                  <h5 class="mb-4 my-3 text-light">Student Biodata</h5>
                   <div class="bg-light p-3 rounded">
                     <div class="d-flex justify-content-between">
                       <strong>Name</strong>
@@ -139,7 +139,7 @@
 
               <!-- Payments List -->
               <div class="col-md-4 p-3" v-if="viewingPayments">
-                  <h5 class="my-3">Payments</h5>
+                  <h5 class="my-3 text-light">Payments</h5>
                   <ul class="list-group items-list">
                       <li v-for="payment in payments" :key="payment.payment_id" class="list-group-item">
                         <div class="d-flex justify-content-between text-start">
@@ -239,13 +239,20 @@
       //     this.$router.push({ name: 'add-payment', params: { studentId: this.selectedStudent.student_id } });
       // },
 
-      handleInput() {},
+      handleInput() {
+        this.searchStudents();
+      },
 
       searchStudents() {
-          const search_query = this.search_query;
-          const field = this.filter;
-          console.log(search_query);
-          console.log(field);
+        const query = `?${this.filter ? this.filter : 'first_name'}=${this.search_query ? this.search_query : 'first_name'}`;
+        ApiService.getStudents(query).then(response => {
+          console.log(response.data);
+          if (response.data.length > 0) {
+            this.students = response.data
+          }
+        }).catch(error => {
+          console.log(error);
+        });
       },
   },
   mounted() {
