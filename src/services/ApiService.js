@@ -40,8 +40,16 @@ class ApiService {
     // make a payment
     makePayment(data) {
         return apiClient.post('/payments', data)
-    }
+    }  
 
-}
+
+    getFees() {
+        return apiClient.get('/students-details');
+
+    }
+    
+} 
+
+
 
 export default new ApiService();
