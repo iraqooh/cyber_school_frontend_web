@@ -1,7 +1,8 @@
 <template>
-     <div class="container mt-5 d-flex flex-column align-items-center">
-      <h2 class="heading">Students and Their Fees</h2>
-      <div class="table-responsive" v-if="students.length > 0">
+  <div class="container mt-5 d-flex flex-column align-items-center">
+    <h2 class="heading">Students and Their Fees</h2>
+    <div class="table-responsive w-100" v-if="students.length > 0">
+      <div class="table-container">
         <table class="table table-striped">
           <thead>
             <tr>
@@ -27,13 +28,15 @@
           </tbody>
         </table>
       </div>
-      <div v-else>
-        <p>No students available.</p>
-      </div>
     </div>
-  </template>
+    <div v-else>
+      <p>No students available.</p>
+    </div>
+  </div>
+</template>
+
   
-  <script>
+<script>
   import ApiService from '../services/ApiService';
   
   export default {
@@ -60,24 +63,29 @@
       }
     }
   };
-  </script>
+</script>
   
-  <style scoped>
-  .heading {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .table-responsive {
-    margin-top: 20px;
-  }
-  
-  .table thead th {
-    background-color: #f8f9fa;
-  }
-  
-  .table tbody tr:nth-child(odd) {
-    background-color: #f2f2f2;
-  }
-  </style>
+<style scoped>
+.heading {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.table-responsive {
+  margin-top: 20px;
+}
+
+.table-container {
+  overflow-x: scroll;
+}
+
+.table thead th {
+  background-color: #f8f9fa;
+}
+
+.table tbody tr:nth-child(odd) {
+  background-color: #f2f2f2;
+}
+</style>
+
   

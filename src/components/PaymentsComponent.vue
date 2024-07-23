@@ -1,12 +1,12 @@
 <template>
-  <div class="payments p-5">
-    <div class="p-5" >
+  <div class="payments p-md-5">
+    <div class="p-3" >
         <div class="d-flex justify-content-between align-items-center my-3">
             <h5 class="">Payments</h5>
             <router-link class="btn btn-primary ms-2" :to="{ name: 'add-payment' }">Add Payment</router-link>
         </div>
-        <div class="">
-          <table class="table table-striped table-responsive">
+        <div class="table-responsive">
+          <table class="table table-striped">
             <thead>
               <tr>
                 <th>Payment ID</th>
