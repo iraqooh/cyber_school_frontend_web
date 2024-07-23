@@ -49,7 +49,7 @@ export default {
     fetchPayments() {
       ApiService.getPaymentDetails().then(response => {
         this.payments = response.data;
-        this.visiblePayments = this.payments.slice(0, this.itemsToLoad);
+        if (this.payments.length > 0) this.visiblePayments = this.payments.slice(0, this.itemsToLoad);
         console.log(this.visiblePayments[0]);
       }).catch(error => {
         console.error(error);

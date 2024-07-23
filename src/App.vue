@@ -15,9 +15,6 @@
               <router-link class="nav-link text-light" to="/students">Students</router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link text-light" to="/add">Add</router-link>
-            </li>
-            <li class="nav-item">
               <router-link class="nav-link text-light" to="/fees">Fees</router-link>
             </li>
             <li class="nav-item">
@@ -137,5 +134,8 @@
       flex-shrink: 0;
       background-color: whitesmoke;
       background: radial-gradient(rgb(162, 163, 177), rgb(159, 166, 205), whitesmoke);
+      animation: bounce;
+      animation-duration: 4s;
+      --animate-repeat: 2;
     }
 </style>

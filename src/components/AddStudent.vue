@@ -1,15 +1,22 @@
 <template>
   <div class="container mt-5 d-flex flex-column align-items-center">
+    <!-- Success Alert -->
     <div v-if="showSuccessAlert" class="alert alert-success alert-dismissible fade show w-100" role="alert">
       Student added successfully!
       <button type="button" class="btn-close" aria-label="Close" @click="dismissAlert"></button>
     </div>
 
+    <!-- Progress Indicator -->
+    <div v-if="loading" class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+
+    <!-- Add Student Form -->
     <div class="d-flex justify-content-center w-50-md w-100">
       <div v-if="!showStudentDetails" class="m-4 w-100">
         <h2 class="mb-5">Add New Student</h2>
         <form @submit.prevent="addStudent">
-          <!-- form fields -->
+          <!-- Form Fields -->
           <div class="mb-3">
             <label for="firstName" class="form-label">First Name</label>
             <input type="text" class="form-control" id="firstName" v-model="form.first_name" required>
@@ -37,7 +44,7 @@
           </div>
           <div class="mb-3">
             <label for="parentsContact" class="form-label">Parents' Contact</label>
-            <input type="text" class="form-control" id="parentsContact" v-model="form.parents_contact" required>
+            <input type="tel" class="form-control" id="parentsContact" v-model="form.parents_contact" required>
           </div>
           <div class="mb-3">
             <label for="physicalAddress" class="form-label">Physical Address</label>
@@ -86,19 +93,20 @@
       </div>
     </div>
 
+    <!-- Student Details -->
     <div class="d-flex justify-content-center w-50-md w-100" v-if="showStudentDetails">
       <div class="w-100">
         <h3>Student Details</h3>
-        <p><strong>Name:</strong> {{ newStudent.first_name }} {{ newStudent.last_name }}</p>
-        <p><strong>Date of Birth:</strong> {{ newStudent.date_of_birth }}</p>
-        <p><strong>Gender:</strong> {{ newStudent.gender }}</p>
-        <p><strong>Parents' Contact:</strong> {{ newStudent.parents_contact }}</p>
-        <p><strong>Physical Address:</strong> {{ newStudent.physical_address }}</p>
-        <p><strong>Category:</strong> {{ newStudent.category }}</p>
-        <p><strong>Class:</strong> {{ newStudent.class }}</p>
-        <p><strong>Status:</strong> {{ newStudent.status ? 'Active' : 'Inactive' }}</p>
-        <p><strong>Fees:</strong> {{ (newStudent.school_fees ?? 0).toLocaleString('en-US') }}</p>
-        <p><strong>Initial Payment:</strong> {{ (newStudent.initial_payment ?? 0).toLocaleString('en-US') }}</p>
+        <p><strong>Name:</strong> {{ newStudent?.first_name }} {{ newStudent?.last_name }}</p>
+        <p><strong>Date of Birth:</strong> {{ newStudent?.date_of_birth }}</p>
+        <p><strong>Gender:</strong> {{ newStudent?.gender }}</p>
+        <p><strong>Parents' Contact:</strong> {{ newStudent?.parents_contact }}</p>
+        <p><strong>Physical Address:</strong> {{ newStudent?.physical_address }}</p>
+        <p><strong>Category:</strong> {{ newStudent?.category }}</p>
+        <p><strong>Class:</strong> {{ newStudent?.class }}</p>
+        <p><strong>Status:</strong> {{ newStudent?.status ? 'Active' : 'Inactive' }}</p>
+        <p><strong>Fees:</strong> UGX {{ (this.fees ?? 0).toLocaleString('en-US') }}</p>
+        <p><strong>Initial Payment:</strong> UGX {{ (this.initial_payment ?? 0).toLocaleString('en-US') }}</p>
         <button class="btn btn-danger" @click="dismissStudentDetails">Dismiss</button>
       </div>
     </div>
@@ -106,71 +114,83 @@
 </template>
 
 <script>
-import ApiService from '../services/ApiService'
+  import ApiService from '../services/ApiService'
 
-export default {
-  name: 'AddStudent',
+  export default {
+    name: 'AddStudent',
 
-  data() {
-    return {
-      form: {
-        first_name: '',
-        last_name: '',
-        gender: 'M',
-        date_of_birth: '',
-        parents_contact: '',
-        physical_address: '',
-        category: 'Day',
-        class: '',
-        status: false,
-        school_fees: 0,
+    data() {
+      return {
+        form: {
+          first_name: '',
+          last_name: '',
+          gender: 'M',
+          date_of_birth: '2000-01-01',
+          parents_contact: '+256',
+          physical_address: '',
+          category: 'Day',
+          class: '',
+          status: false,
+          school_fees: 0,
+          initial_payment: 0,
+        },
+        showSuccessAlert: false,
+        showStudentDetails: false,
+        newStudent: null,
+        fees: 0,
         initial_payment: 0,
-      },
-      showSuccessAlert: false,
-      showStudentDetails: false,
-      newStudent: null,
-    };
-  },
-
-  methods: {
-    async addStudent() {
-      try {
-        const response = await ApiService.addStudent(this.form);
-        this.newStudent = response.data.student; // Ensure response is destructured correctly
-        this.showSuccessAlert = true;
-        this.showStudentDetails = true;
-        this.resetForm(); // Reset form after successful submission
-      } catch (error) {
-        console.error('Error adding student:', error);
-      }
-    },
-
-    dismissAlert() {
-      this.showSuccessAlert = false;
-    },
-
-    dismissStudentDetails() {
-      this.showStudentDetails = false;
-      this.newStudent = null;
-    },
-
-    resetForm() {
-      this.form = {
-        first_name: '',
-        last_name: '',
-        gender: 'M',
-        date_of_birth: '',
-        parents_contact: '',
-        physical_address: '',
-        category: 'Day',
-        class: '',
-        status: false,
-        school_fees: 0,
-        initial_payment: 0,
+        loading: false,
       };
     },
-  },
-};
+
+    methods: {
+      async addStudent() {
+        this.loading = true;
+        try {
+          let data = this.form;
+          if (this.form.initial_payment <= 0) {
+            delete data.initial_payment;
+          }
+          const response = await ApiService.addStudent(data);
+          this.newStudent = response.data;
+          this.showSuccessAlert = true;
+          this.showStudentDetails = true;
+          this.fees = this.form.school_fees;
+          this.initial_payment = this.form.initial_payment;
+          this.resetForm();
+        } catch (error) {
+          console.error('Error adding student:', error);
+        } finally {
+          this.loading = false;
+        }
+      },
+
+      dismissAlert() {
+        this.showSuccessAlert = false;
+      },
+
+      dismissStudentDetails() {
+        this.showStudentDetails = false;
+        this.newStudent = null;
+      },
+
+      resetForm() {
+        this.form = {
+          first_name: '',
+          last_name: '',
+          gender: 'M',
+          date_of_birth: '2000-01-01',
+          parents_contact: '+256',
+          physical_address: '',
+          category: 'Day',
+          class: '',
+          status: false,
+          school_fees: 0,
+          initial_payment: 0,
+        };
+      },
+    },
+  };
 </script>
 
 <style scoped>
@@ -192,6 +212,10 @@ form {
 
 .container {
   width: 50%;
+}
+
+.spinner-border {
+  margin-top: 20px;
 }
 
 @media screen and (max-width: 768px) {

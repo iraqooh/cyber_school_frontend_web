@@ -1,38 +1,13 @@
 <template>
   <div class="home">
-
     <!-- Analytics Banner -->
     <div class="analytics-banner p-3">
       <div class="row d-flex justify-content-center">
-        <div class="col-md-2 col-6 my-3">
+        <div class="col-md-2 col-6 my-3" v-for="item in analyticsItems" :key="item.title">
           <div class="card h-100">
-            <div class="card-body text-center text-light bg-success rounded">
-              <h5 class="card-title">Registered Students</h5>
-              <p class="card-text">{{ analytics.registeredStudentsCount }}</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-2 col-6 my-3">
-          <div class="card h-100">
-            <div class="card-body text-center bg-warning rounded">
-              <h5 class="card-title">Expected Fees</h5>
-              <p class="card-text">UGX {{ analytics.totalExpectedFees.toLocaleString('en-US') }}</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-2 col-6 my-3">
-          <div class="card h-100">
-            <div class="card-body text-center text-light bg-danger rounded">
-              <h5 class="card-title">Current Payments</h5>
-              <p class="card-text">UGX {{ analytics.totalPayments.toLocaleString('en-US') }}</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-2 col-6 my-3">
-          <div class="card h-100">
-            <div class="card-body text-center text-light bg-primary rounded">
-              <h5 class="card-title">Outstanding Fees</h5>
-              <p class="card-text">UGX {{ analytics.outstandingFees.toLocaleString('en-US') }}</p>
+            <div :class="['card-body text-center rounded', item.bgColor]">
+              <h5 class="card-title">{{ item.title }}</h5>
+              <p class="card-text">{{ item.value }}</p>
             </div>
           </div>
         </div>
@@ -44,8 +19,7 @@
                 <svg width="60" height="60">
                   <circle cx="30" cy="30" r="25" stroke="lightgray" stroke-width="5" fill="none"></circle>
                   <circle cx="30" cy="30" r="25" :stroke="percentagePaidColor" 
-                      stroke-width="5" fill="none" :stroke-dasharray="percentagePaid 
-                      + ' 100'" stroke-dashoffset="25" transform="rotate(-90, 30, 30)"></circle>
+                      stroke-width="5" fill="none" :stroke-dasharray="analytics.percentagePaid + ' 100'" stroke-dashoffset="25" transform="rotate(-90, 30, 30)"></circle>
                   <text x="50%" y="50%" text-anchor="middle" dy=".3em">{{ analytics.percentagePaid.toFixed(0) }}%</text>
                 </svg>
               </div>
@@ -56,30 +30,13 @@
     </div>
 
     <!-- Search feature -->
-    <div class="container text-center w-md-75 w-100 d-flex justify-content-center">
-      <div class="input-group my-4 w-75">
-          <input type="text" class="form-control w-25 border-primary" placeholder="Search for a student"
-              v-model="search_query" @input="handleInput" @keypress.enter="searchStudents"/>
-          <select class="form-select input-group-prepend border-primary" 
-          v-model="filter" @change="setFilter" placeholder="hey">
-              <option value="first_name" selected>First Name</option>
-              <option value="last_name">Last Name</option>
-              <option value="gender">Gender</option>
-              <option value="physical_address">Physical Address</option>
-              <option value="category">Category</option>
-              <option value="id">Student ID</option>
-              <option value="status">Registration Status</option>
-          </select>
-          <button class="btn btn-dark text-light" type="button" @click="searchStudents">Search</button>
-      </div>
-    </div>
+    <SearchComponent @search="searchStudents" />
 
     <!-- Main Content -->
     <div class="main-content d-flex">
         <div class="biodata row w-100 mx-5">
-
             <!-- Students List -->
-            <div class="col-md-4 p-3" >
+            <div class="col-md-4 p-3">
                 <div class="d-flex justify-content-between align-items-center my-3">
                     <h5>Our Students</h5>
                     <router-link class="btn btn-primary" :to="{ name: 'add-student' }">Add Student</router-link>
@@ -93,12 +50,14 @@
                     </li>
                 </ul>
                 </div>
-                
             </div>
 
             <!-- Student Biodata -->
             <div class="col-md-4 p-3 biodata" v-if="selectedStudent">
-                <h5 class="mb-4 my-3">Student Biodata</h5>
+              <div class="m-3 d-flex justify-content-between align-items-center">
+                  <h5>{{ selectedStudent.first_name }}'s Details</h5>
+                  <router-link class="btn btn-primary" :to="{ name: 'edit-student', params: { id: selectedStudent.student_id} }">Edit {{ selectedStudent.first_name }}</router-link>
+              </div>
                 <div class="bg-light p-3 rounded">
                   <div class="d-flex justify-content-between">
                     <strong>Name</strong>
@@ -190,156 +149,158 @@
   </div>
 </template>
 
-
 <script>
-  import ApiService from '../services/ApiService'
+  import ApiService from '../services/ApiService';
+import SearchComponent from './SearchComponent.vue';
 
-  export default {
+export default {
   name: 'HomeComponent',
+  components: {
+    SearchComponent,
+  },
   data() {
-      return {
-          analytics: {
-              registeredStudentsCount: 0,
-              totalExpectedFees: 0,
-              totalPayments: 0,
-              outstandingFees: 0,
-              percentagePaid: 0,
-          },
-          students: [],
-          selectedStudent: null,
-          payments: [],
-          viewingPayments: false,
-
-          search_query: null,
-          filter: 'first_name',
-      };
+    return {
+      analytics: {
+        registeredStudentsCount: 0,
+        totalExpectedFees: 0,
+        totalPayments: 0,
+        outstandingFees: 0,
+        percentagePaid: 0,
+      },
+      students: [],
+      selectedStudent: null,
+      payments: [],
+      viewingPayments: false,
+      search_query: null,
+      filter: 'first_name',
+    };
   },
   computed: {
-      percentagePaidColor() {
-          return this.analytics.percentagePaid > 50 ? 'green' : 'red';
-      },
-
-      isSelected(student) {
-          return this.selectedStudent === student;
-      },
-
-      isDisabled() {
-        return this.selectedStudent.total_payments === this.selectedStudent.school_fees;
-      }
+    percentagePaidColor() {
+      return this.analytics.percentagePaid > 50 ? 'green' : 'red';
+    },
+    isSelected(student) {
+      return this.selectedStudent === student;
+    },
+    isDisabled() {
+      return this.selectedStudent?.total_payments === this.selectedStudent?.school_fees;
+    },
+    analyticsItems() {
+      return [
+        {
+          title: 'Registered Students',
+          value: this.analytics.registeredStudentsCount,
+          bgColor: 'bg-success text-light',
+        },
+        {
+          title: 'Expected Fees',
+          value: `UGX ${this.analytics.totalExpectedFees.toLocaleString('en-US')}`,
+          bgColor: 'bg-warning',
+        },
+        {
+          title: 'Current Payments',
+          value: `UGX ${this.analytics.totalPayments.toLocaleString('en-US')}`,
+          bgColor: 'bg-danger text-light',
+        },
+        {
+          title: 'Outstanding Fees',
+          value: `UGX ${this.analytics.outstandingFees.toLocaleString('en-US')}`,
+          bgColor: 'bg-primary text-light',
+        },
+      ];
+    },
   },
   methods: {
-      fetchAnalytics() {
-          ApiService.getSchoolFinancials().then(response => {
-              this.analytics = response.data;
-          }).catch(error => {
-              console.error(error)
-          })
-          
-      },
-
-      fetchStudents() {
-          ApiService.getStudentFinancialDetails().then(response => {
-              this.students = response.data;
-          }).catch(error => {
-              console.log(error);
-          })
-      },
-
-      selectStudent(student) {
-          this.selectedStudent = student;
-          this.viewingPayments = false;
-      },
-
-
-      viewPayments(payments) {
-          this.payments = payments.slice(0, 15);
-          this.viewingPayments = true;
-      },
-
-      goToPayment(event) {
-        if (this.isDisabled) {
-          event.preventDefault();
-        }
-      },
-
-      addStudent() {
-          this.$router.push({ name: 'add-student' });
-      },
-
-
-      // showAddPayment() {
-      //     this.$router.push({ name: 'add-payment', params: { studentId: this.selectedStudent.student_id } });
-      // },
-
-      handleInput() {
-        this.searchStudents();
-      },
-
-      searchStudents() {
-        const query = `?${this.filter ? this.filter : 'first_name'}=${this.search_query ? this.search_query : 'first_name'}`;
-        console.log(query);
-        ApiService.getStudents(query).then(response => {
-          console.log(response.data);
-          if (response.data.length > 0) {
-            this.students = response.data
-          }
-        }).catch(error => {
+    fetchAnalytics() {
+      ApiService.getSchoolFinancials()
+        .then((response) => {
+          this.analytics = response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    fetchStudents() {
+      ApiService.getStudentFinancialDetails()
+        .then((response) => {
+          this.students = response.data;
+        })
+        .catch((error) => {
           console.log(error);
         });
-      },
+    },
+    selectStudent(student) {
+      this.selectedStudent = student;
+      this.viewingPayments = false;
+    },
+    viewPayments(payments) {
+      this.payments = payments.slice(0, 15);
+      this.viewingPayments = true;
+    },
+    goToPayment(event) {
+      if (this.isDisabled) {
+        event.preventDefault();
+      }
+    },
+    addStudent() {
+      this.$router.push({ name: 'add-student' });
+    },
+    searchStudents({ filter, searchQuery }) {
+      const query = `?${filter}=${searchQuery}`;
+      ApiService.getStudents(query)
+        .then((response) => {
+          if (response.data.length > 0) {
+            this.students = response.data;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
   mounted() {
-      this.fetchAnalytics();
-      this.fetchStudents();
+    this.fetchAnalytics();
+    this.fetchStudents();
   },
-  };
+};
 </script>
 
-
 <style scoped>
-  .analytics-banner .card {
-      flex: 1;
-      margin: 0 10px;
-  }
+.analytics-banner .card {
+  flex: 1;
+  margin: 0 10px;
+}
 
-  .analytics-banner {
-    background: radial-gradient(rgb(162, 163, 177), rgb(159, 166, 205), whitesmoke);
-  }
+.analytics-banner {
+  background: radial-gradient(rgb(162, 163, 177), rgb(159, 166, 205), whitesmoke);
+}
 
-  .main-content {
-      display: flex;
-      justify-content: space-between;
-  }
+.main-content {
+  display: flex;
+  justify-content: space-between;
+}
 
-  .list-group-item:hover {
-      background-color: dimgrey;
-      color: whitesmoke;
-  }
+.list-group-item:hover {
+  background-color: dimgrey;
+  color: whitesmoke;
+}
 
-  .sculpture {
-      z-index: 1;
-  }
+.sculpture {
+  z-index: 1;
+}
 
-  .items-list {
-    max-height: 450px; 
-    overflow-y: auto;
-  }
+.items-list {
+  max-height: 450px;
+  overflow-y: auto;
+}
 
-  .btn-link:hover {
-    border: 2px solid blue;
-    /* color: whitesmoke; */
-  }
+.btn-link:hover {
+  border: 2px solid blue;
+}
 
-  .disabled-link {
-    pointer-events: none;
-    cursor: not-allowed;
-  }
-
-  /* .home {
-      flex: 1;
-      background: whitesmoke;
-      background: -webkit-radial-gradient(blue, rgb(62, 86, 222), whitesmoke);
-      background: -ms-radial-gradient(blue, rgb(62, 86, 222), whitesmoke);
-      background: radial-gradient(blue, rgb(62, 86, 222), whitesmoke);
-    } */
+.disabled-link {
+  pointer-events: none;
+  cursor: not-allowed;
+}
 </style>
+

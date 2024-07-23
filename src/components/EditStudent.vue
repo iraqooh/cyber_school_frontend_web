@@ -1,5 +1,10 @@
 <template>
     <div class="container mt-5">
+      <!-- Progress Indicator -->
+      <div v-if="isLoading" class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+
       <div v-if="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
         <div class="d-flex justify-content-evenly">
             <strong>Success!</strong> {{ successMessage }}
@@ -20,16 +25,10 @@
 
       <div v-if="!success & !notFound">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2>Edit Student</h2>
+            <h2>Edit {{ student.first_name }}</h2>
             <button class="btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#deleteStudentModal">
-            Delete Student
+            Delete {{ student.first_name }}
             </button>
-        </div>
-
-        <div v-if="isLoading" class="progress-indicator">
-            <svg viewBox="0 0 24 24">
-                <circle class="spin" cx="12" cy="12" r="12" fill="none" stroke-width="4" />
-            </svg>
         </div>
     
         <form @submit.prevent="updateStudent">
@@ -106,8 +105,13 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Are you sure you want to delete this student?</h5>
+              <h5 class="modal-title">Are you sure you want to delete {{ student.first_name }}?</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div v-if="isLoading" class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -195,6 +199,7 @@
       },
 
       confirmDelete() {
+        this.isLoading = true;
         ApiService.deleteStudent(this.student.student_id).then(response => {
           if (response.status === 204) {
             this.success = true;

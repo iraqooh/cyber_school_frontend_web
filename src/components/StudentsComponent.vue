@@ -1,96 +1,101 @@
 <template>
-  <div class="container my-5">
-    <div class="card flex-grow-1 me-3">
-      <div class="card-header">
-        <h4 class="text-center">Students</h4>
-      </div>
-      <div class="card-body">
-        <ul v-if="students.length > 0" class="list-group">
-          <li v-for="(student, index) in students" :key="index" class="list-group-item" @click="selectStudent(student)">
-            {{ student.first_name }} {{ student.last_name }}
-          </li>
-        </ul>
-        <div v-else>
-          Loading......
+  <div class="container">
+    <!-- Search feature -->
+    <SearchComponent @search="handleSearch"/>
+
+    <!-- Main content -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-2">
+      <div class="col card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5>All Students</h5>
+            <router-link class="btn btn-primary" :to="{ name: 'add-student' }">Add Student</router-link>
+        </div>
+        <div class="card-body">
+          <div v-if="visibleStudents.length > 0">
+            <ul class="list-group students">
+              <li v-for="(student, index) in visibleStudents" :key="index" class="list-group-item" @click="selectStudent(student)">
+                {{ student.first_name }} {{ student.last_name }}
+              </li>
+            </ul>
+            <button class="btn btn-secondary w-100 mt-3" @click="loadMoreStudents">Load More</button>
+          </div>
+          <div v-else>
+            Loading......
+          </div>
         </div>
       </div>
-    </div>
-    <div v-if="selectedStudent" class="card flex-grow-1">
-      <div class="card-header" style="background-color: green;">
-        <h5 class="text-center">Student Details</h5>
+      <div v-if="!selectedStudent" class="col-md-6 col-lg-8">
+        <img src="../assets/students.jpeg" alt="students" class="rounded-2 mx-2 w-100"/>
       </div>
-      <div class="card-body">
-        <table class="table table-bordered">
-          <tbody>
-            <tr>
-              <th>First Name</th>
-              <td>{{ selectedStudent.first_name }}</td>
-            </tr>
-            <tr>
-              <th>Last Name</th>
-              <td>{{ selectedStudent.last_name }}</td>
-            </tr>
-            <tr>
-              <th>Date of Birth</th>
-              <td>{{ selectedStudent.date_of_birth }}</td>
-            </tr>
-            <tr>
-              <th>Gender</th>
-              <td>{{ selectedStudent.gender }}</td>
-            </tr>
-            <tr>
-              <th>Physical Address</th>
-              <td>{{ selectedStudent.physical_address }}</td>
-            </tr>
-            <tr>
-              <th>Category</th>
-              <td>{{ selectedStudent.category }}</td>
-            </tr>
-            <tr>
-              <th>Class</th>
-              <td>{{ selectedStudent.class }}</td>
-            </tr>
-            <tr>
-              <th>Status</th>
-              <td>{{ selectedStudent.status ? 'Active' : 'Inactive' }}</td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <router-link :to="{ path: '/' + selectedStudent.student_id + '/edit' }"
-                  class="btn btn-success float-end">
-                  Edit
-                </router-link>
-                <button type="button" class="btn btn-danger float-end me-2">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div v-if="selectedStudent" class="col card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5>{{ selectedStudent.first_name }}'s Details</h5>
+            <router-link class="btn btn-primary" :to="{ name: 'edit-student', params: { id: selectedStudent.student_id} }">Edit {{ selectedStudent.first_name }}</router-link>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <th>First Name</th>
+                <td>{{ selectedStudent.first_name }}</td>
+              </tr>
+              <tr>
+                <th>Last Name</th>
+                <td>{{ selectedStudent.last_name }}</td>
+              </tr>
+              <tr>
+                <th>Date of Birth</th>
+                <td>{{ selectedStudent.date_of_birth.split('T')[0] }}</td>
+              </tr>
+              <tr>
+                <th>Gender</th>
+                <td>{{ selectedStudent.gender === 'F' ? 'Female' : 'Male'  }}</td>
+              </tr>
+              <tr>
+                <th>Physical Address</th>
+                <td>{{ selectedStudent.physical_address }}</td>
+              </tr>
+              <tr>
+                <th>Category</th>
+                <td>{{ selectedStudent.category }}</td>
+              </tr>
+              <tr>
+                <th>Class</th>
+                <td>{{ selectedStudent.class }}</td>
+              </tr>
+              <tr>
+                <th>Status</th>
+                <td>{{ selectedStudent.status ? 'Active' : 'Inactive' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="card flex-grow-1">
-        <div class="card-header" style="background-color: green;">
-          <h5 class="text-center">Student Finances</h5>
+      <div v-if="selectedStudent" class="col card">
+        <div class="card-header">
+          <h5 class="text-center">{{ selectedStudent.first_name }}'s Finances</h5>
         </div>
         <div class="card-body">
           <table class="table table-bordered">
             <tbody>
               <tr>
                 <th>Expected School Fees</th>
-                <td>{{ selectedStudent.school_fees }}</td>
+                <td>{{ `UGX ${selectedStudent.school_fees.toLocaleString('en-US')}` }}</td>
               </tr>
               <tr>
                 <th>Amount Paid</th>
-                <td>{{ selectedStudent.total_payments }}</td>
+                <td>{{ `UGX ${selectedStudent.total_payments.toLocaleString('en-US')}` }}</td>
               </tr>
               <tr>
                 <th>Amount Due</th>
-                <td>{{ selectedStudent.outstanding_fees }}</td>
+                <td>{{ `UGX ${selectedStudent.outstanding_fees.toLocaleString('en-US')}` }}</td>
               </tr>
               <tr>
-                <th>Initial Payment (Optional)</th>
+                <th>Payments</th>
                 <td>
                   <ul>
                     <li v-for="payment in selectedStudent.payments" :key="payment.payment_id">
-                      {{ payment.amount }} - {{ new Date(payment.createdAt).toLocaleDateString() }}
+                      {{ `UGX ${payment.amount.toLocaleString('en-US')}` }} on {{ new Date(payment.createdAt).toLocaleDateString() }}
                     </li>
                   </ul>
                 </td>
@@ -104,19 +109,24 @@
 </template>
 
 <script>
+import SearchComponent from './SearchComponent.vue';
 import ApiService from '../services/ApiService';
 
 export default {
   name: 'list-student',
+  components: {
+    SearchComponent
+  },
   data() {
     return {
       students: [],
-      selectedStudent: null
+      selectedStudent: null,
+      visibleStudents: [],
+      itemsToLoad: 18,
     };
   },
   mounted() {
     this.getStudents();
-
   },
   methods: {
     async getStudents() {
@@ -124,7 +134,7 @@ export default {
         const res = await ApiService.getStudents();
         if (Array.isArray(res.data)) {
           this.students = res.data;
-          console.log('Students data:', JSON.parse(JSON.stringify(this.students)));
+          this.visibleStudents = this.students.slice(0, this.itemsToLoad);
         } else {
           console.error('Unexpected response structure:', res.data);
         }
@@ -138,7 +148,6 @@ export default {
         const res = await ApiService.getStudentFinancialDetails(studentId);
         if (res.data) {
           this.selectedStudent = { ...this.selectedStudent, ...res.data };
-          console.log('Student financial details:', JSON.parse(JSON.stringify(this.selectedStudent)));
         } else {
           console.error('Unexpected response structure:', res.data);
         }
@@ -150,6 +159,26 @@ export default {
     selectStudent(student) {
       this.selectedStudent = student;
       this.getStudentFinancialDetails(student.student_id); // Fetch financial details when a student is selected
+    },
+    
+    async handleSearch({ filter, searchQuery }) {
+      const query = `?${filter}=${searchQuery}`;
+      try {
+        const response = await ApiService.getStudents(query);
+        if (response.data.length > 0) {
+          this.students = response.data;
+          this.visibleStudents = this.students.slice(0, this.itemsToLoad);
+        } else {
+          this.visibleStudents = [];
+        }
+      } catch (error) {
+        console.error('There was an error searching for students:', error);
+      }
+    },
+
+    loadMoreStudents() {
+      this.itemsToLoad += 10;
+      this.visibleStudents = this.students.slice(0, this.itemsToLoad);
     }
   }
 };
@@ -161,7 +190,23 @@ export default {
 }
 
 .list-group-item:hover {
-  background-color: #f1f1f1;
+  background-color: dimgrey;
+  color: whitesmoke;
 }
 
+.container {
+  width: 100%;
+}
+
+.students {
+  max-height: 100%;
+  overflow-y: scroll;
+}
+
+@media screen and (min-width: 768px) {
+  .container {
+    width: 50%;
+    margin: 0 auto;
+  }
+}
 </style>
