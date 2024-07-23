@@ -2,8 +2,8 @@
   <div class="home">
     <!-- Analytics Banner -->
     <div class="analytics-banner p-3">
-      <div class="row d-flex justify-content-center">
-        <div class="col-md-2 col-6 my-3" v-for="item in analyticsItems" :key="item.title">
+      <div class="g-3 row row-cols-lg-6 row-cols-md-2 row-cols-1 d-flex justify-content-center">
+        <div class="col" v-for="item in analyticsItems" :key="item.title">
           <div class="card h-100">
             <div :class="['card-body text-center rounded', item.bgColor]">
               <h5 class="card-title">{{ item.title }}</h5>
@@ -11,7 +11,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-2 col-6 my-3">
+        <div class="col">
           <div class="card h-100">
             <div class="card-body text-center rounded">
               <h5 class="card-title">Percentage Paid</h5>

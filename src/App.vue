@@ -45,7 +45,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="footer bg-light text-center text-lg-start mt-5 pb-5">
+    <footer class="footer bg-light text-center text-lg-start mt-5">
       <div class="container p-4">
         <div class="row">
           <div class="col-lg-3 col-md-12 mb-4 mb-md-0">
@@ -95,6 +95,9 @@
             </a>
           </div>
         </div>
+        <div class="text-center mt-5">
+          <p><span><img src="./assets/powellpay.png" alt="powellpay_logo" class="logo me-2"/></span>&copy; 2024 Powellpay Limited</p>
+        </div>
       </div>
     </footer>
   </div>
@@ -134,5 +137,9 @@
       animation: bounce;
       animation-duration: 4s;
       --animate-repeat: 2;
+    }
+
+    .logo {
+      width: 25px;
     }
 </style>
