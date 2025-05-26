@@ -26,7 +26,7 @@
             <input type="text" class="form-control" id="lastName" v-model="form.last_name" required>
           </div>
           <div class="mb-3">
-            <label for="dateOfBirth" class="form-label">Date of Birth</label>
+            <label for="dateOfBirth" class="form-label">Date Of Birth</label>
             <input type="date" class="form-control" id="dateOfBirth" v-model="form.date_of_birth" required>
           </div>
           <div class="mb-3">
